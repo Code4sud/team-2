@@ -1,0 +1,8 @@
+Flask==2.3.3
+Werkzeug
+pandas
+scikit-learn
+matplotlib
+schedule
+requests
+gunicorn

@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./front
+      dockerfile: dockerfile
+    ports:
+      - "3000:3000"
+
+  backend:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5000"

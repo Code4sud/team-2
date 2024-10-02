@@ -8,7 +8,6 @@ export default function App() {
        <BrowserRouter>
       <Routes>
         <Route path="/" element={<Analyse />}>
-          <Route index element={<Analyse />} />
         </Route>
       </Routes>
     </BrowserRouter>

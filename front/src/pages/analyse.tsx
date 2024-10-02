@@ -1,4 +1,3 @@
-// src/PollutionMap.tsx
 import React, { useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -100,10 +99,10 @@ export default function Analyse() {
   });
 
   return (
-    <div className="flex w-full p-4">
-      <div className="w-1/2 p-2">
-        <h1 className="text-3xl font-bold mb-4">Carte de la Pollution</h1>
-        <MapContainer center={position} zoom={6} style={{ height: "500px", width: "100%" }}>
+    <div className="flex w-full ">
+      <div className="w-[60%] p-2">
+        <h1 className="text-3xl font-bold text-black mb-4">Carte de la Pollution</h1>
+        <MapContainer center={position} zoom={6} style={{ height: "80vh", width: "100%" }}> 
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -127,8 +126,9 @@ export default function Analyse() {
           ))}
         </MapContainer>
       </div>
-
-    
+      <div className="w-[40%] bg-blue-500">
+          Graphiques
+      </div>
     </div>
   );
 }

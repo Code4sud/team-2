@@ -46,13 +46,12 @@
 | **CO**        | 10 mg/m³ (valeur limite sur 8h)   |
 
 
-
-Code	Description en français
-TG	Température moyenne journalière
-TN	Température minimale journalière
-TX	Température maximale journalière
-RR	Somme des précipitations journalières
-PP	Pression atmosphérique moyenne journalière au niveau de la mer
-HU	Humidité relative moyenne journalière
-FG	Vitesse moyenne journalière du vent
-QQ	Rayonnement global moyen journalier
+Code	Description
+TG	    Température moyenne journalière
+TN	    Température minimale journalière
+TX	    Température maximale journalière
+RR	    Somme des précipitations journalières
+PP	    Pression atmosphérique moyenne journalière au niveau de la mer
+HU	    Humidité relative moyenne journalière
+FG	    Vitesse moyenne journalière du vent
+QQ	    Rayonnement global moyen journalier

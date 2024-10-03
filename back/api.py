@@ -1,9 +1,11 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS  # Import CORS
 import os
 import json
 import requests
-
 app = Flask(__name__)
+
+CORS(app)  # Activer CORS pour toutes les routes
 
 # Utiliser http://ollama:11434 comme OLLAMA_HOST si aucune variable d'environnement n'est définie
 OLLAMA_HOST = os.environ.get('OLLAMA_HOST', 'http://ollama:11434')
@@ -24,7 +26,7 @@ def get_json_data(dir_name, file_name):
 
 @app.route('/', methods=['GET'])
 def index():
-    data = {
+    return {
         "roadTraffic": {
             "horary_traffic": get_json_data("json-traffic", "trafic_marseille_heure_20241003_111756.json"),
             "daily_traffic": get_json_data("json-traffic", "trafic_marseille_jour_20241003_111821.json")
@@ -53,8 +55,6 @@ def index():
             "daily_pollutant": get_json_data("json-pollutant", "donnees_polluants_jour_20241003_145545.json")
         }
     }
-
-    return jsonify(data)
 
 @app.route('/prompt', methods=['POST'])
 def prompt():

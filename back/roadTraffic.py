@@ -23,14 +23,12 @@ def lire_trafic_marseille(nom_fichier):
     return trafic_marseille
 
 def calculer_moyennes(donnees, niveau):
-    if niveau == "quart-dheure":
-        return calculer_moyennes_quart_dheure(donnees)
-    elif niveau == "heure":
+    if niveau == "heure":
         return calculer_moyennes_heure(donnees)
     elif niveau == "jour":
         return calculer_moyennes_jour(donnees)
     else:
-        raise ValueError("Niveau invalide. Choisissez 'quart-dheure', 'heure' ou 'jour'.")
+        raise ValueError("Niveau invalide. Choisissez 'heure' ou 'jour'.")
 
 def calculer_moyennes_quart_dheure(donnees):
     # Comme les données sont horaires, on retourne simplement les données telles quelles
@@ -83,7 +81,7 @@ def main():
     nom_fichier = "../back/Dataset/CEREMA 1/data_Agglo_horaire.csv"
     trafic_marseille = lire_trafic_marseille(nom_fichier)
 
-    niveau = input("Entrez le niveau de détail souhaité (quart-dheure, heure, jour) : ").lower()
+    niveau = input("Entrez le niveau de détail souhaité (heure, jour) : ").lower()
     
     try:
         moyennes = calculer_moyennes(trafic_marseille, niveau)

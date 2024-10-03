@@ -33,22 +33,17 @@
 |       | Activités humaines                                    | 20%                        |
 
 
-
-
-| **Polluant**      | **Norme européenne**                   | **Période**          |
-|-------------------|----------------------------------------|----------------------|
-| **SO2**           | 125 µg/m³ (alerte)                     | 24h (3x/an max)      |
-|                   | 350 µg/m³ (information)                | 1h (24x/an max)      |
-| **NO**            | Pas de norme                           | -                    |
-| **NO2**           | 200 µg/m³                              | 1h (18x/an max)      |
-|                   | 40 µg/m³                               | Annuelle             |
-| **NOx**           | 30 µg/m³ (protection végétation)       | Annuelle             |
-| **PM10**          | 50 µg/m³                               | 24h (35x/an max)     |
-|                   | 40 µg/m³                               | Annuelle             |
-| **PM2.5**         | 25 µg/m³                               | Annuelle             |
-| **PM1**           | Pas de norme                           | -                    |
-| **CO**            | 10 mg/m³                               | 8h glissantes        |
-| **O3**            | 120 µg/m³                              | 8h (25 jours/an sur 3 ans) |
+| Polluant      | Norme Européenne                   |
+|---------------|------------------------------------|
+| **SO2**       | 125 µg/m³ (max 3 fois/an)         |
+| **NO2**       | 200 µg/m³ (max 18 fois/an)        |
+| **PM10**      | 50 µg/m³ (max 35 fois/an)         |
+| **PM2.5**     | 25 µg/m³ (valeur cible annuelle)   |
+| **O3**        | 180 µg/m³ (max 25 jours/an)       |
+| **NO**        | Pas de norme spécifique            |
+| **NOx**       | Pas de norme journalière spécifique|
+| **PM1**       | Pas de norme spécifique            |
+| **CO**        | 10 mg/m³ (valeur limite sur 8h)   |
 
 
 

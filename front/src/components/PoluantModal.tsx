@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { pollutantInfo } from '@/const/PollutantInfo';
 import { Poluant } from '@/interfaces/Poluant';
 import { HelpCircle, X } from 'lucide-react';
-import { pollutantInfo } from '@/const/PollutantInfo';
+import React, { useState } from 'react';
 
 interface PoluantModalProps {
     poluants: Poluant[];
@@ -12,10 +12,13 @@ interface PoluantModalProps {
 
 const PoluantModal: React.FC<PoluantModalProps> = ({ poluants, selectedPoluants, onPoluantToggle, onClose }) => {
     const [selectedInfoPoluant, setSelectedInfoPoluant] = useState<string | null>(null);
+    // const [backData, setBackData] = useState<any>(null);
 
     const handleInfoClick = (poluant: Poluant) => {
         setSelectedInfoPoluant(poluant.label);
     };
+
+  
 
     const handleSelectAll = () => {
         if (selectedPoluants.length === poluants.length) {

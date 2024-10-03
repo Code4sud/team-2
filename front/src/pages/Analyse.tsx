@@ -1,18 +1,19 @@
-import React, { useState } from "react";
-import { MapContainer, TileLayer, Circle, Popup, useMap,  } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import { Station } from "@/interfaces/Station";
+import axios from "axios";
 import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import React, { useEffect, useState } from "react";
+import { Circle, MapContainer, Popup, TileLayer, useMap, } from "react-leaflet";
 import {
-  BarChart,
   Bar,
-  XAxis,
-  YAxis,
+  BarChart,
   CartesianGrid,
-  Tooltip,
   Legend,
   ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
-import { Station } from "@/interfaces/Station";
 interface SwitchProps {
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;
@@ -20,6 +21,15 @@ interface SwitchProps {
 }
 
 const Switch: React.FC<SwitchProps> = ({ checked, onCheckedChange, id }) => {
+  useEffect(() => {
+    axios.get('http://localhost:5001')
+    .then((response) => {
+        console.log(response.data);
+    })
+    .catch((error) => {
+        console.error('Erreur lors de la récupération des données :', error);
+    });
+}, []);
   return (
     <label className="relative inline-flex items-center cursor-pointer">
       <input

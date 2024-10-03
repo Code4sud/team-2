@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowUpIcon, ArrowDownIcon, MinusIcon } from 'lucide-react';
+import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Station } from '@/interfaces/Station';
-import { ApiFetch } from '@/api/ApiFetch';
+import PoluantModal from '@/components/PoluantModal';
+import { Poluant } from '../interfaces/Poluant';
 
 // Définition des interfaces
 interface Stat {
@@ -56,29 +57,34 @@ export default function AdminDashboard() {
     const [selectedPollutant, setSelectedPollutant] = useState<string>(pollutants[0]);
     const [startDate, setStartDate] = useState<string>('2023-01-01');
     const [endDate, setEndDate] = useState<string>('2023-05-01');
-
-    const [atmosudData, setAtmosudData] = useState<Station[]>([]);
+    const [poluants, setPoluants] = useState<Poluant[]>([]);
+    const [selectedPoluants, setSelectedPoluants] = useState<string[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     useEffect(() => {
-        async function fetchStations() {
+        const fetchPoluants = async () => {
             try {
-                const stations = await ApiFetch({
-                    endpoint: 'stations',
-                    params: {
-                        format: 'json',
-                        download: 'false',
-                        typologie: 'false'
-                    }
-                });
-                setAtmosudData(stations);
-                console.log("Données Atmosud récupérées :", stations);
+                const response = await axios.get('https://api.atmosud.org/observations/stations/polluants');
+                const fetchedPoluants: Poluant[] = response.data.polluants.map((p: any) => ({
+                    ...p,
+                    date: new Date().toISOString() // Adding a default date
+                }));
+                setPoluants(fetchedPoluants);
             } catch (error) {
-                console.error("Erreur lors de la récupération des données Atmosud :", error);
+                console.error('Error fetching poluants:', error);
             }
-        }
+        };
 
-        fetchStations();
+        fetchPoluants();
     }, []);
+
+    const handlePoluantToggle = (poluantId: string) => {
+        setSelectedPoluants(prev =>
+            prev.includes(poluantId)
+                ? prev.filter(id => id !== poluantId)
+                : [...prev, poluantId]
+        );
+    };
 
     return (
         <div className="min-h-screen bg-white">
@@ -90,34 +96,6 @@ export default function AdminDashboard() {
                         <path d="M9 5V19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     <h1 className="text-2xl font-bold">Port Maritime Fos-Marseille - Tableau de Bord Administrateur</h1>
-                    <div className="mt-8 bg-gray-100 rounded-lg shadow-sm p-4">
-                        <h2 className="text-xl font-bold text-gray-700 mb-4">Stations Atmosud</h2>
-                        {atmosudData.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {atmosudData.map((station) => (
-                                    <div key={station.id_station} className="bg-white p-4 rounded-lg shadow">
-                                        <h3 className="font-semibold text-lg mb-2">{station.nom_station}</h3>
-                                        <p><span className="font-medium">ID:</span> {station.id_station}</p>
-                                        <p><span className="font-medium">Département:</span> {station.departement_id}</p>
-                                        <p><span className="font-medium">Adresse:</span> {station.adresse}</p>
-                                        <p><span className="font-medium">Coordonnées:</span> {station.latitude}, {station.longitude}</p>
-                                        {/* <p><span className="font-medium">Début des mesures:</span> {new Date(station.date_debut_mesure).toLocaleDateString()}</p>
-                                        <p><span className="font-medium">Fin des mesures:</span> {new Date(station.date_fin_mesure).toLocaleDateString()}</p> */}
-                                        <div className="mt-2">
-                                            <p className="font-medium">Variables mesurées:</p>
-                                            <ul className="list-disc list-inside">
-                                                {Object.entries(station.variables).map(([code, name]) => (
-                                                    <li key={code}>{name} (Code: {code})</li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <p>Chargement des données des stations...</p>
-                        )}
-                    </div>
                 </div>
             </header>
 
@@ -125,16 +103,18 @@ export default function AdminDashboard() {
                 <div className="flex flex-wrap items-center mb-4 bg-gray-100 rounded-lg shadow-sm p-4">
                     <div className="w-full sm:w-auto mb-2 sm:mb-0 mr-4">
                         <label htmlFor="pollutant" className="block text-sm font-medium text-gray-700 mb-1">Polluant</label>
-                        <select
-                            id="pollutant"
-                            value={selectedPollutant}
-                            onChange={(e) => setSelectedPollutant(e.target.value)}
-                            className="mt-1 block w-full bg-white text-gray-800 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-                        >
-                            {pollutants.map((pollutant) => (
-                                <option key={pollutant} value={pollutant}>{pollutant}</option>
-                            ))}
-                        </select>
+                        <div className="flex items-center gap-2">
+                            <select
+                                id="pollutant"
+                                value={selectedPollutant}
+                                onChange={(e) => setSelectedPollutant(e.target.value)}
+                                className="mt-1 block w-full bg-white text-gray-800 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                            >
+                                {pollutants.map((pollutant) => (
+                                    <option key={pollutant} value={pollutant}>{pollutant}</option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
                     <div className="w-full sm:w-auto mb-2 sm:mb-0 mr-4">
                         <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">Date de début</label>
@@ -146,7 +126,7 @@ export default function AdminDashboard() {
                             className="mt-1 block w-full bg-white text-gray-800 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                         />
                     </div>
-                    <div className="w-full sm:w-auto">
+                    <div className="w-full sm:w-auto mb-2 sm:mb-0 mr-4">
                         <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-1">Date de fin</label>
                         <input
                             type="date"
@@ -156,6 +136,12 @@ export default function AdminDashboard() {
                             className="mt-1 block w-full bg-white text-gray-800 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                         />
                     </div>
+                    <button
+                        onClick={() => setIsModalOpen(true)}
+                        className="mt-2 sm:mt-0 ml-0 sm:ml-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                    >
+                        Sélectionner les polluants
+                    </button>
                 </div>
                 <div className="flex flex-wrap -mx-2">
                     {stats.map((stat, index) => (
@@ -199,6 +185,15 @@ export default function AdminDashboard() {
                         </ResponsiveContainer>
                     </div>
                 </div>
+
+                {isModalOpen && (
+                    <PoluantModal
+                        poluants={poluants}
+                        selectedPoluants={selectedPoluants}
+                        onPoluantToggle={handlePoluantToggle}
+                        onClose={() => setIsModalOpen(false)}
+                    />
+                )}
             </main>
         </div>
     );

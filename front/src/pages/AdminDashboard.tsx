@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowUpIcon, ArrowDownIcon, MinusIcon } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Station } from '@/interfaces/Station';
+import { ApiFetch } from '@/api/ApiFetch';
 
 // Définition des interfaces
 interface Stat {
@@ -55,6 +57,29 @@ export default function AdminDashboard() {
     const [startDate, setStartDate] = useState<string>('2023-01-01');
     const [endDate, setEndDate] = useState<string>('2023-05-01');
 
+    const [atmosudData, setAtmosudData] = useState<Station[]>([]);
+
+    useEffect(() => {
+        async function fetchStations() {
+            try {
+                const stations = await ApiFetch({
+                    endpoint: 'stations',
+                    params: {
+                        format: 'json',
+                        download: 'false',
+                        typologie: 'false'
+                    }
+                });
+                setAtmosudData(stations);
+                console.log("Données Atmosud récupérées :", stations);
+            } catch (error) {
+                console.error("Erreur lors de la récupération des données Atmosud :", error);
+            }
+        }
+
+        fetchStations();
+    }, []);
+
     return (
         <div className="min-h-screen bg-white">
             <header className="bg-white text-blue-800 p-4 shadow-sm">
@@ -65,6 +90,34 @@ export default function AdminDashboard() {
                         <path d="M9 5V19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     <h1 className="text-2xl font-bold">Port Maritime Fos-Marseille - Tableau de Bord Administrateur</h1>
+                    <div className="mt-8 bg-gray-100 rounded-lg shadow-sm p-4">
+                        <h2 className="text-xl font-bold text-gray-700 mb-4">Stations Atmosud</h2>
+                        {atmosudData.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {atmosudData.map((station) => (
+                                    <div key={station.id_station} className="bg-white p-4 rounded-lg shadow">
+                                        <h3 className="font-semibold text-lg mb-2">{station.nom_station}</h3>
+                                        <p><span className="font-medium">ID:</span> {station.id_station}</p>
+                                        <p><span className="font-medium">Département:</span> {station.departement_id}</p>
+                                        <p><span className="font-medium">Adresse:</span> {station.adresse}</p>
+                                        <p><span className="font-medium">Coordonnées:</span> {station.latitude}, {station.longitude}</p>
+                                        {/* <p><span className="font-medium">Début des mesures:</span> {new Date(station.date_debut_mesure).toLocaleDateString()}</p>
+                                        <p><span className="font-medium">Fin des mesures:</span> {new Date(station.date_fin_mesure).toLocaleDateString()}</p> */}
+                                        <div className="mt-2">
+                                            <p className="font-medium">Variables mesurées:</p>
+                                            <ul className="list-disc list-inside">
+                                                {Object.entries(station.variables).map(([code, name]) => (
+                                                    <li key={code}>{name} (Code: {code})</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p>Chargement des données des stations...</p>
+                        )}
+                    </div>
                 </div>
             </header>
 

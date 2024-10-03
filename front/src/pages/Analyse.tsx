@@ -12,8 +12,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-
-
+import { Station } from "@/interfaces/Station";
 interface SwitchProps {
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;
@@ -34,20 +33,6 @@ const Switch: React.FC<SwitchProps> = ({ checked, onCheckedChange, id }) => {
     </label>
   );
 };
-
-
-interface Station {
-  id_station: string;
-  nom_station: string;
-  departement_id: string;
-  adresse: string;
-  latitude: number;
-  longitude: number;
-  variables: {
-    [key: string]: string;
-  };
-}
-
 
 const stationData: Station[] = [
   {
